@@ -85,6 +85,7 @@ button {
   }
   .container {
     padding: 1rem;
+    margin-bottom: 2rem;
     max-width: 85%;
     max-height: 85vh;
   }
