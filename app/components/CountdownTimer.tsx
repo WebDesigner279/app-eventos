@@ -45,7 +45,7 @@ export default function CountdownTimer() {
       const fullDistance = targetDate.getTime() - now.getTime(); // Tempo total restante (ms)
       const dayDistance = targetDate.getTime() - todayZero.getTime(); // Diferença em dias (ms)
 
-      const totalDays = Math.floor(dayDistance / (1000 * 60 * 60 * 24)) + 1; // Dias restantes
+      const totalDays = Math.floor(dayDistance / (1000 * 60 * 60 * 24)); // Dias restantes
 
       // Se o tempo acabou, mostra a mensagem de aniversário
       if (fullDistance <= 0) {
