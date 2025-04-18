@@ -19,7 +19,7 @@ export default function RootLayout({
 
             {/* Cabeçalho da página com título e subtítulo centralizados */}
             <div className="page-title">
-              <h1>Meu Aniversário</h1>
+              <h1>Seu Aniversário</h1>
               <h2>É mais que especial!</h2>
             </div>
 
