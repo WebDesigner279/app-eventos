@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 // Importa a função para configurar a store do Redux
 import { configureStore } from "@reduxjs/toolkit";

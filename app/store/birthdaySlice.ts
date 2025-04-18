@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
@@ -15,7 +15,7 @@ const initialState: BirthdayState = {
 // Criação do slice do Redux para manipular o estado do aniversário
 const birthdaySlice = createSlice({
   name: "birthday", // Nome do slice
-  initialState,     // Estado inicial definido acima
+  initialState, // Estado inicial definido acima
   reducers: {
     // Define o reducer que atualiza a data de nascimento no estado
     setBirthDate: (state, action: PayloadAction<string>) => {

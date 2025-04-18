@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 // Importa o formulário onde o usuário insere a data de nascimento
 import BirthdayForm from "./components/BirthdayForm";

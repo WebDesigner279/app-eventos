@@ -54,15 +54,19 @@ export default function CountdownTimer() {
       }
 
       // Cálculos do tempo restante
-      const hours = Math.floor((fullDistance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((fullDistance % (1000 * 60 * 60)) / (1000 * 60));
+      const hours = Math.floor(
+        (fullDistance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+      );
+      const minutes = Math.floor(
+        (fullDistance % (1000 * 60 * 60)) / (1000 * 60),
+      );
       const seconds = Math.floor((fullDistance % (1000 * 60)) / 1000);
 
       // Atualiza o estado com a string formatada
       setTimeLeft(
         `${totalDays}d ${hours.toString().padStart(2, "0")}h ${minutes
           .toString()
-          .padStart(2, "0")}m ${seconds.toString().padStart(2, "0")}s`
+          .padStart(2, "0")}m ${seconds.toString().padStart(2, "0")}s`,
       );
 
       return false; // Continua o setInterval
