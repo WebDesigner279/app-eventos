@@ -29,4 +29,4 @@ Este é um aplicativo simples em **Next.js + Redux** que permite ao usuário ins
 1. Clone o repositório:
 
 ```bash
-git clone https://github.com/seu-usuario/nome-do-repo.git
+git clone https://github.com/WebDesigner279/app-eventos.git
