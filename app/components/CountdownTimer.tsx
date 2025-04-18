@@ -4,16 +4,16 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { useEffect, useState } from "react";
 
-// Função para calcular a próxima data de aniversário com base em uma data no formato "YYYY-MM-DD"
+// Função que retorna o próximo aniversário a partir de uma data no formato "YYYY-MM-DD"
 function getNextBirthday(birthDate: string): Date {
-  const today = new Date();
-  const [_, month, day] = birthDate.split("-").map(Number);
+  const today = new Date(); // Data atual
+  const [_, month, day] = birthDate.split("-").map(Number); // Extrai mês e dia da string
 
-  // Cria uma data para o próximo aniversário
+  // Cria um objeto Date para o próximo aniversário
   let nextBirthday = new Date(today.getFullYear(), month - 1, day);
-  nextBirthday.setHours(0, 0, 0, 0); // Define como início do dia
+  nextBirthday.setHours(0, 0, 0, 0); // Zera hora, minuto, segundo e milissegundo
 
-  // Se a data já passou este ano, avança para o próximo ano
+  // Se a data já passou este ano, define para o ano seguinte
   if (nextBirthday < today) {
     nextBirthday.setFullYear(today.getFullYear() + 1);
   }
@@ -22,70 +22,71 @@ function getNextBirthday(birthDate: string): Date {
 }
 
 export default function CountdownTimer() {
-  // Obtém a data de aniversário do estado global
+  // Obtém a data de aniversário armazenada no Redux
   const birthDate = useSelector((state: RootState) => state.birthday.birthDate);
 
   // Estado local para armazenar o tempo restante formatado
   const [timeLeft, setTimeLeft] = useState("");
 
+  // useEffect será executado sempre que a `birthDate` mudar
   useEffect(() => {
-    // Se não houver data de nascimento definida, sai do efeito
-    if (!birthDate) return;
+    if (!birthDate) return; // Se não tiver data, não faz nada
 
-    // Calcula a próxima data de aniversário
-    const targetDate = getNextBirthday(birthDate);
+    const targetDate = getNextBirthday(birthDate); // Próxima data de aniversário
 
-    // Função que calcula e atualiza o tempo restante
+    // Função para atualizar o contador a cada segundo
     const updateTimer = () => {
-      const now = new Date();
+      const now = new Date(); // Data atual
 
-      // Data de hoje à meia-noite
+      // Data de hoje à meia-noite (usada para calcular os "dias restantes")
       const todayZero = new Date(now);
       todayZero.setHours(0, 0, 0, 0);
 
-      // Diferença total em milissegundos até o próximo aniversário
-      const fullDistance = targetDate.getTime() - now.getTime();
+      const fullDistance = targetDate.getTime() - now.getTime(); // Tempo total restante (ms)
+      const dayDistance = targetDate.getTime() - todayZero.getTime(); // Diferença em dias (ms)
 
-      // Diferença de dias completos
-      const dayDistance = targetDate.getTime() - todayZero.getTime();
-      const totalDays = Math.floor(dayDistance / (1000 * 60 * 60 * 24)) + 1;
+      const totalDays = Math.floor(dayDistance / (1000 * 60 * 60 * 24)) + 1; // Dias restantes
 
-      // Se o aniversário chegou ou passou, exibe mensagem
+      // Se o tempo acabou, mostra a mensagem de aniversário
       if (fullDistance <= 0) {
         setTimeLeft("Feliz Aniversário!");
-        return true; // Sinaliza que deve parar o intervalo
+        return true; // Retorna true para indicar que deve parar o setInterval
       }
 
-      // Cálculo de horas, minutos e segundos restantes
+      // Cálculos do tempo restante
       const hours = Math.floor((fullDistance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((fullDistance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((fullDistance % 1000 * 60) / 1000);
+      const seconds = Math.floor((fullDistance % (1000 * 60)) / 1000);
 
-      // Atualiza o estado com o tempo formatado
-      setTimeLeft(`${totalDays}d ${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s`);
-      return false;
+      // Atualiza o estado com a string formatada
+      setTimeLeft(
+        `${totalDays}d ${hours.toString().padStart(2, "0")}h ${minutes
+          .toString()
+          .padStart(2, "0")}m ${seconds.toString().padStart(2, "0")}s`
+      );
+
+      return false; // Continua o setInterval
     };
 
-    // Executa uma vez ao montar o componente
-    const isExpired = updateTimer();
-    
-    // Inicia o intervalo apenas se ainda houver tempo restante
-    const interval = !isExpired ? setInterval(() => {
-      const shouldClear = updateTimer();
-      if (shouldClear) {
-        clearInterval(interval);
-      }
-    }, 1000) : null;
+    const isExpired = updateTimer(); // Executa a função imediatamente uma vez
 
-    // Limpa o intervalo ao desmontar o componente
+    // Se ainda tiver tempo, inicia o intervalo a cada segundo
+    const interval = !isExpired
+      ? setInterval(() => {
+          const shouldClear = updateTimer();
+          if (shouldClear) clearInterval(interval); // Limpa o intervalo se o tempo acabar
+        }, 1000)
+      : null;
+
+    // Cleanup: remove o intervalo quando o componente for desmontado
     return () => {
       if (interval) clearInterval(interval);
     };
   }, [birthDate]);
 
-  // Se a data de aniversário ainda não foi definida, não renderiza nada
+  // Se a data ainda não foi definida, não renderiza nada
   if (!birthDate) return null;
 
-  // Exibe o tempo restante
+  // Renderiza o contador
   return <div className="timer">Tempo restante: {timeLeft}</div>;
 }
